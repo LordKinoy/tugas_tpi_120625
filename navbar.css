@@ -1,0 +1,347 @@
+/* Mengatur scrollbar agar muncul di paling kanan */
+::-webkit-scrollbar {
+    width: 8px; /* Lebar scrollbar */
+    position: absolute;
+    right: 0;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* Menghilangkan background track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #a259ff; /* Warna scrollbar */
+    border-radius: 10px;
+}
+/* Untuk Firefox */
+* {
+    scrollbar-width: thin; /* Membuat scrollbar lebih tipis */
+    scrollbar-color: #a259ff transparent; /* Warna thumb dan track */
+}
+
+body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background-image: url("bg2_11zon.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* Lapisan blur + gelap */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit; /* Ambil background dari body */
+    filter: blur(5px); /* Tingkat blur ditingkatkan */
+    z-index: -2; /* Tetap di belakang lapisan gelap */
+}
+
+/* Lapisan transparan untuk efek gelap */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Efek gelap lebih pekat */
+    z-index: -1;
+}
+
+/* HERO SECTION */
+.hero {
+    padding: 80px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-down {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #090909;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 15px #a259ff;
+    border-top: 3px solid #a259ff;
+    z-index: 10;
+
+    transform: translateY(100%); /* Sembunyi di bawah */
+    opacity: 0; /* Tak terlihat */
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+}
+
+.hero-down.show {
+    transform: translateY(0%);
+    opacity: 1;
+}
+
+.hero-down.hide-for-right {
+    transform: translateY(100%) !important; /* turun ke bawah */
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out !important;
+    opacity: 0 !important;
+}
+
+.hero-down.show-for-right {
+    transform: translateY(0%) !important;
+    transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out !important;
+    opacity: 1 !important;
+}
+
+.circle {
+    width: 80px;
+    height: 80px;
+    background-color: #090909; /* Warna hitam pekat */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #a259ff; /* Warna ungu neon */
+    box-shadow: 0px 0px 15px #a259ff; /* Glow effect */
+    cursor: pointer;
+}
+
+.circle svg {
+    width: 40px;
+    height: 40px;
+    color: #a259ff; /* Warna ungu neon */
+    transition: transform 0.5s ease-in-out;
+}
+
+.icon-rotate {
+    transform: rotate(180deg); /* Rotasi saat expanded */
+}
+
+.rotate-in {
+    animation: rotateAnim 0.8s ease forwards;
+}
+
+.rotate-out {
+    animation: rotateBackAnim 0.8s ease forwards;
+}
+
+/* Konten disembunyikan saat hero-down masih dalam mode 10vh */
+.content-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out,
+        visibility 0.5s ease-in-out;
+}
+
+/* Saat hero-down diperluas ke 100vh, konten ikut terbuka */
+.hero-down.expanded {
+    height: 100vh;
+}
+
+/* Aktifkan tampilan saat expanded */
+.hero-down.expanded .content-wrapper {
+    max-height: 100vh;
+    opacity: 1;
+    visibility: visible;
+}
+
+.hero-down.toggle-height {
+    transition: height 0.5s ease-in-out !important;
+}
+
+/* Efek Rotasi Icon */
+#iconArrow {
+    transition: transform 0.5s ease-in-out;
+    width: 60px;
+    height: 60px;
+    color: #a259ff; /* Warna ungu neon */
+}
+
+/* HERO RIGHT */
+.hero-right {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 100vh;
+    background-color: #090909;
+    overflow: hidden;
+    transition: width 0.5s ease-in-out;
+    box-shadow: -5px 0 15px #a259ff;
+    z-index: 2;
+}
+
+.circle-right {
+    width: 80px;
+    height: 80px;
+    background-color: #090909;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #a259ff;
+    box-shadow: 0px 0px 15px #a259ff;
+    cursor: pointer;
+}
+
+.circle-right svg {
+    width: 40px;
+    height: 40px;
+    color: #a259ff;
+    transition: transform 0.5s ease-in-out;
+}
+
+.icon-rotate-right {
+    transform: rotate(180deg) !important;
+}
+
+/* Konten disembunyikan saat tertutup */
+.content-wrapper-right {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Saat hero-right diperluas */
+.hero-right.expanded {
+    width: 100vw; /* atau ganti 400px kalau mau fixed width */
+}
+
+.hero-right.expanded .content-wrapper-right {
+    opacity: 1;
+}
+/*///////////////////////////////////////////////////////////*/
+
+/* NAVBAR */
+/* .active-nav {
+    border-bottom: 2px solid yellow;
+} */
+
+.nav-link-caption {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    transition: color 0.3s ease-in-out;
+}
+
+.nav-link.nav-link-caption:hover {
+    color: yellow !important;
+    text-shadow: 0px 0px 5px rgba(255, 255, 0, 0.8);
+}
+
+.content {
+    display: none; /* Sembunyikan section awalnya */
+}
+
+.content.show {
+    display: block; /* Tampilkan ketika class 'show' ditambahkan */
+}
+
+.section-container {
+    position: relative;
+    min-height: 77vh;
+}
+
+.content-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+    z-index: -1;
+}
+
+.content-section.active-section {
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+}
+
+.active-nav > .nav-link {
+    font-weight: bold;
+    color: #a259ff !important;
+}
+
+.responsive-icon {
+    width: 20px;
+    height: 20px;
+    fill: #a259ff;
+}
+
+.div-img {
+    margin-right: 5vw;
+    width: 50vh;
+    height: 50vh;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        height: 90px !important;
+    }
+
+    .hero-down.expanded .content-wrapper {
+        overflow-y: scroll;
+    }
+}
+
+@media (min-width: 768px) {
+    .responsive-icon {
+        width: 30px;
+        height: 30px;
+        fill: #a259ff;
+    }
+}
+
+/* KEYFRAMES */
+
+@keyframes rotateAnim {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+@keyframes rotateBackAnim {
+    from {
+        transform: rotate(180deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes floatUpDown {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* =============================================================== */
